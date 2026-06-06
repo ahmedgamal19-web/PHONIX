@@ -604,3 +604,46 @@ a {
   flex-direction: column;
   gap: 8px;
 }
+
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: #e6eef6;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+  order: 2;
+}
+
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(11, 18, 32, 0.96);
+    backdrop-filter: blur(16px);
+    flex-direction: column;
+    padding: 20px;
+    gap: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+    z-index: 100;
+  }
+  .nav-links.show {
+    display: flex;
+  }
+  .nav-link {
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+  }
+}
