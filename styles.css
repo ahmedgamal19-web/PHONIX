@@ -510,3 +510,89 @@ a {
   opacity: 1;
   transform: translateX(-50%) translateY(10px);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== تحسينات الهواتف الصغيرة (أقل من 600px) ===== */
+@media (max-width: 600px) {
+  .hero-card h2 {
+    font-size: 20px;
+  }
+  .hero-card p {
+    font-size: 13px;
+  }
+  .btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hero-image img {
+    max-height: 200px;
+  }
+  .features {
+    flex-direction: column;
+  }
+  .section h3 {
+    font-size: 18px;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .card {
+    padding: 10px;
+  }
+  .product img {
+    height: 120px;
+  }
+  .admin-controls {
+    flex-direction: column;
+  }
+  .admin-left, .admin-right {
+    min-width: 100%;
+  }
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cart-item img {
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+  }
+  .footer div {
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .controls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .controls input,
+  .controls select {
+    flex: 1;
+    min-width: 100%;
+  }
+}
