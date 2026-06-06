@@ -6,6 +6,7 @@
   <title>PHONIX</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="data:," />
+  
 </head>
 <body>
   <header class="navbar">
@@ -16,7 +17,11 @@
         <p class="subtitle">إكسسوارات وصيانة الموبايل</p>
       </div>
     </div>
-
+  
+    <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+      ☰
+    </button>
+  
     <nav class="nav-links">
       <a href="index.html" class="nav-link active">الرئيسية</a>
       <a href="products.html" class="nav-link">المنتجات</a>
@@ -123,6 +128,12 @@
         // ثم عرض وظائف الصفحة
         renderQuickProducts(6);
         updateCartCountHeader();
+        // إغلاق قائمة الهامبرغر عند اختيار رابط
+        document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.remove('show');
+          });
+        });
       });
     });
   </script>
