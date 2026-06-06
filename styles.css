@@ -596,3 +596,11 @@ a {
     min-width: 100%;
   }
 }
+
+.cart-summary {
+  font-size: 14px;
+}
+.cart-actions {
+  flex-direction: column;
+  gap: 8px;
+}
