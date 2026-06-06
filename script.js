@@ -105,6 +105,27 @@ function clearCart() {
   if (confirm("تفريغ السلة؟")) setCart([]);
 }
 
+
+// ---------- تشغيل قائمة الهامبرغر (لجميع الصفحات) ----------
+function initHamburgerMenu() {
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const navLinks = document.querySelector('.nav-links');
+  
+  if (!hamburgerBtn || !navLinks) return; // إذا لم توجد العناصر، توقف
+
+  // فتح/إغلاق القائمة عند الضغط على الزر
+  hamburgerBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+
+  // إغلاق القائمة عند اختيار أي رابط
+  document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('show');
+    });
+  });
+}
+
 // ---------- checkout with WhatsApp + Firestore ----------
 async function checkout() {
   const cart = getCart();
@@ -423,5 +444,6 @@ window.checkout = checkout;
 // سيتم استدعاء هذه الدالة من checkAuthState في كل صفحة
 async function initializeData() {
   await loadProductsFromFirestore();
+  initHamburgerMenu();
   // يمكن إضافة أي تحميلات أخرى
 }
