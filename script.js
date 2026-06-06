@@ -107,22 +107,30 @@ function clearCart() {
 
 
 // ---------- تشغيل قائمة الهامبرغر (لجميع الصفحات) ----------
+// ---------- تشغيل قائمة الهامبرغر (لجميع الصفحات) ----------
 function initHamburgerMenu() {
   const hamburgerBtn = document.getElementById('hamburger-btn');
   const navLinks = document.querySelector('.nav-links');
   
-  if (!hamburgerBtn || !navLinks) return; // إذا لم توجد العناصر، توقف
+  if (!hamburgerBtn || !navLinks) return;
 
-  // فتح/إغلاق القائمة عند الضغط على الزر
-  hamburgerBtn.addEventListener('click', () => {
+  hamburgerBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     navLinks.classList.toggle('show');
   });
 
-  // إغلاق القائمة عند اختيار أي رابط
+  // إغلاق القائمة عند النقر على أي رابط
   document.querySelectorAll('.nav-links .nav-link').forEach(link => {
     link.addEventListener('click', () => {
       navLinks.classList.remove('show');
     });
+  });
+
+  // إغلاق عند النقر خارج القائمة
+  document.addEventListener('click', (e) => {
+    if (!navLinks.contains(e.target) && e.target !== hamburgerBtn) {
+      navLinks.classList.remove('show');
+    }
   });
 }
 
