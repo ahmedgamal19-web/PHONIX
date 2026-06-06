@@ -15,7 +15,11 @@
         <p class="subtitle">تسوق ما تحتاجه</p>
       </div>
     </div>
-
+  
+    <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+      ☰
+    </button>
+  
     <nav class="nav-links">
       <a href="index.html" class="nav-link">الرئيسية</a>
       <a href="products.html" class="nav-link active">المنتجات</a>
@@ -70,6 +74,13 @@
         await initializeData();
         initProductsPage();
         updateCartCountHeader();
+  
+        // إغلاق قائمة الهامبرغر عند اختيار رابط
+        document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.remove('show');
+          });
+        });
       });
     });
   </script>
