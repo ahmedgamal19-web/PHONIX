@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PHONIX — لوحة التحكم</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">
+      <img src="LOGOPHONE.png" alt="PHONIX Logo" class="logo" />
+      <div>
+        <h1>PHONIX Admin</h1>
+        <p class="subtitle">لوحة تحكم المدير</p>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">الرئيسية</a>
+      <a href="products.html" class="nav-link">المنتجات</a>
+      <a href="repair.html" class="nav-link">طلب صيانة</a>
+      <a href="admin.html" class="nav-link active" id="admin-link">لوحة التحكم</a>
+      <a href="cart.html" class="nav-link cart-link">سلة (<span id="cart-count-header">0</span>)</a>
+      <a href="#" onclick="logout()" class="nav-link" style="color: var(--danger)">تسجيل خروج</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="section admin-panel card">
+      <h3>لوحة التحكم — مدير النظام</h3>
+
+      <div class="admin-controls">
+        <div class="admin-left">
+          <h4>إضافة / تعديل منتج</h4>
+          <form id="product-form-page" class="form">
+            <input type="hidden" name="id" />
+            <div class="row"><label>اسم المنتج</label><input name="title" required /></div>
+            <div class="row"><label>التصنيف</label><input name="category" required /></div>
+            <div class="row"><label>السعر (ج)</label><input type="number" name="price" required /></div>
+            <div class="row"><label>الوصف</label><textarea name="description" rows="3"></textarea></div>
+            <div class="row"><label>صورة المنتج</label><input type="file" id="product-image-input" accept="image/*" style="padding:8px; background:var(--glass); border-radius:8px; color:var(--muted);" /><input type="hidden" name="image" id="product-image-data" /><img id="image-preview" style="max-width:100px; margin-top:8px; display:none; border-radius:8px;" /></div>
+            <div class="row actions">
+              <button type="submit" class="btn">حفظ المنتج</button>
+              <button id="product-reset-page" type="button" class="btn ghost">تفريغ</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-right">
+          <h4>قائمة المنتجات</h4>
+          <div id="admin-products-list-page" class="admin-list"></div>
+
+          <h4 style="margin-top:18px">طلبات الصيانة</h4>
+          <div id="admin-repairs-list-page" class="admin-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© PHONIX Admin</p>
+  </footer>
+
+  <!-- Firebase SDKs & Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="auth.js"></script>
+
+  <script src="products-data.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuthState(async (user, role) => {
+        if (role !== 'admin') {
+          alert('غير مصرح لك بدخول هذه الصفحة');
+          window.location.href = 'index.html';
+          return;
+        }
+        await initializeData();
+        initAdminPage();
+        updateCartCountHeader();
+      });
+    });
+  </script>
+</body>
+</html>

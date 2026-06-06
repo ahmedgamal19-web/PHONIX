@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PHONIX — المنتجات</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">
+      <img src="LOGOPHONE.png" alt="PHONIX Logo" class="logo" />
+      <div>
+        <h1>PHONIX</h1>
+        <p class="subtitle">تسوق ما تحتاجه</p>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link">الرئيسية</a>
+      <a href="products.html" class="nav-link active">المنتجات</a>
+      <a href="repair.html" class="nav-link">طلب صيانة</a>
+      <a href="admin.html" class="nav-link" id="admin-link" style="display:none;">لوحة التحكم</a>
+      <a href="cart.html" class="nav-link cart-link">سلة (<span id="cart-count-header">0</span>)</a>
+      <a href="#" onclick="logout()" class="nav-link" style="color: var(--danger)">تسجيل خروج</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="section card">
+      <div class="section-header">
+        <h3>المنتجات</h3>
+        <div class="controls">
+          <input id="search-input-page" placeholder="ابحث عن منتج..." />
+          <select id="filter-cat-page">
+            <option value="">كل التصنيفات</option>
+          </select>
+          <select id="sort-select-page">
+            <option value="default">ترتيب افتراضي</option>
+            <option value="price-asc">الأرخص أولاً</option>
+            <option value="price-desc">الأغلى أولاً</option>
+            <option value="name-asc">الاسم (أ-ي)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="products-grid-page" class="grid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© PHONIX Store</p>
+  </footer>
+
+  <!-- Firebase SDKs & Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="auth.js"></script>
+
+  <!-- الملفات المحلية (مؤقت) -->
+  <script src="products-data.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuthState(async (user, role) => {
+        const adminLink = document.getElementById('admin-link');
+        if (adminLink) adminLink.style.display = (role === 'admin') ? 'inline-block' : 'none';
+        await initializeData();
+        initProductsPage();
+        updateCartCountHeader();
+      });
+    });
+  </script>
+</body>
+</html>

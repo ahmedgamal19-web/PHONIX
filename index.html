@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PHONIX</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:," />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">
+      <img src="LOGOPHONE.png" alt="PHONIX Logo" class="logo" />
+      <div>
+        <h1>PHONIX</h1>
+        <p class="subtitle">إكسسوارات وصيانة الموبايل</p>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link active">الرئيسية</a>
+      <a href="products.html" class="nav-link">المنتجات</a>
+      <a href="repair.html" class="nav-link">طلب صيانة</a>
+      <a href="admin.html" class="nav-link" id="admin-link" style="display:none;">لوحة التحكم</a>
+      <a href="cart.html" class="nav-link cart-link">سلة (<span id="cart-count-header">0</span>)</a>
+      <a href="#" onclick="logout()" class="nav-link" style="color: var(--danger)">تسجيل خروج</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-card">
+        <h2>مرحبا بك في PHONIX Store</h2>
+        <p>تسوّق إكسسوارات أصلية واطلب خدمة صيانة بسهولة. جودة — سرعة — ثقة.</p>
+        <div class="hero-actions">
+          <a class="btn" href="products.html">تصفح المنتجات</a>
+          <a class="btn ghost" href="repair.html">طلب صيانة الآن</a>
+        </div>
+        <div class="features">
+          <div class="feature">
+            <h4>منتجات أصلية</h4>
+            <p>اختيارات مختارة بعناية</p>
+          </div>
+          <div class="feature">
+            <h4>خدمة صيانة سريعة</h4>
+            <p>استلام وتسليم محترف</p>
+          </div>
+          <div class="feature">
+            <h4>دعم محلي</h4>
+            <p>تواصل سريع ومباشر</p>
+          </div>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img src="phone1.png" alt="Hero" />
+      </div>
+    </section>
+
+    <section class="section quick-products">
+      <h3>أحدث المنتجات</h3>
+      <div id="quick-products-grid" class="grid"></div>
+      <div style="margin-top:12px;">
+        <a class="btn" href="products.html">عرض كل المنتجات</a>
+      </div>
+    </section>
+
+    <section class="section about-section">
+      <div class="about-header">
+        <h3>من نحن</h3>
+        <p>قصة نجاح بدأت من شغف التقنية</p>
+      </div>
+      <div class="about-grid">
+        <div class="about-card card">
+          <div class="about-icon">🎯</div>
+          <h4>مهمتنا</h4>
+          <p>توفير أحدث الإكسسوارات وخدمات الصيانة بجودة عالية وأسعار تنافسية تلبي احتياجات الجميع.</p>
+        </div>
+        <div class="about-card card">
+          <div class="about-icon">👁️</div>
+          <h4>رؤيتنا</h4>
+          <p>أن نكون العلامة التجارية الأولى في عالم صيانة وإكسسوارات الهواتف الذكية على المستوى المحلي.</p>
+        </div>
+        <div class="about-card card">
+          <div class="about-icon">⭐</div>
+          <h4>قيمنا</h4>
+          <p>الثقة، السرعة، الإتقان، والشفافية المطلقة مع عملائنا في كل تعامل.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div style="display:flex; justify-content:center; gap: 30px; flex-wrap:wrap; margin-bottom:10px;">
+      <a href="products.html">المنتجات</a>
+      <a href="repair.html">طلب صيانة</a>
+      <a href="cart.html">السلة</a>
+      <a href="https://wa.me/201204818221" target="_blank">واتساب</a>
+    </div>
+    <p>© 2026 PHONIX Store — جميع الحقوق محفوظة. صممه Ahmed Gamal</p>
+  </footer>
+
+  <!-- Firebase SDKs & Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+  <script src="auth.js"></script>
+
+  <!-- الملفات القديمة (مؤقتاً) -->
+  <script src="products-data.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    // تنفيذ بعد التأكد من تسجيل الدخول
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuthState(async (user, role) => {
+        // إظهار رابط لوحة التحكم إذا كان أدمن
+        const adminLink = document.getElementById('admin-link');
+        if (adminLink) {
+          adminLink.style.display = (role === 'admin') ? 'inline-block' : 'none';
+        }
+        // ✅ تحميل المنتجات من Firestore أولاً
+        await initializeData();
+        // ثم عرض وظائف الصفحة
+        renderQuickProducts(6);
+        updateCartCountHeader();
+      });
+    });
+  </script>
+</body>
+</html>

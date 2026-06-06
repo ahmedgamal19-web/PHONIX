@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تسجيل الدخول - PHONIX</title>
+  <style>
+    :root {
+      --bg: #0f1720;
+      --card: #0b1220;
+      --muted: #9aa6b2;
+      --accent: #06b6d4;
+      --accent-2: #7c3aed;
+      --danger: #ef4444;
+      --radius: 12px;
+      --font-sans: "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: linear-gradient(180deg, #061019 0%, #071629 60%);
+      color: #e6eef6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-container {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.03);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .login-container img.logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+    .login-container h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #e6eef6;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      color: #e6eef6;
+      font-size: 14px;
+      outline: none;
+    }
+    .login-container input::placeholder {
+      color: var(--muted);
+    }
+    .login-container .btn {
+      width: 100%;
+      padding: 12px;
+      font-weight: bold;
+      font-size: 15px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #061019;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .error-message {
+      color: var(--danger);
+      margin-top: 10px;
+      font-size: 13px;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <img src="LOGOPHONE.png" alt="PHONIX Logo" class="logo" />
+    <h2>تسجيل الدخول</h2>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="البريد الإلكتروني" required autocomplete="email" />
+      <input type="password" id="password" placeholder="كلمة المرور" required autocomplete="current-password" />
+      <button type="submit" class="btn">دخول</button>
+    </form>
+    <div id="error-msg" class="error-message"></div>
+  </div>
+
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // تهيئة Firebase (استخدم القيم الخاصة بك من Firebase Console)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAIXpesopK9RytZJqrfGQ2QEy1OQfy0hkw",
+      authDomain: "phonix-97329.firebaseapp.com",
+      projectId: "phonix-97329",
+      storageBucket: "phonix-97329.firebasestorage.app",
+      messagingSenderId: "493561850942",
+      appId: "1:493561850942:web:0e672aa239f385b3e8756f",
+      measurementId: "G-1ZP6N2YW5J"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // معالجة تسجيل الدخول
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('error-msg');
+      errorEl.textContent = '';
+
+      try {
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        // جلب دور المستخدم من Firestore
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        let role = 'user';
+        if (userDoc.exists) {
+          role = userDoc.data().role || 'user';
+        } else {
+          // إذا لم يوجد مستند، ننشئه بدور 'user' افتراضيًا
+          await db.collection('users').doc(user.uid).set({
+            email: user.email,
+            role: 'user'
+          });
+        }
+        // تخزين الدور في sessionStorage لاستخدامه لاحقًا
+        sessionStorage.setItem('role', role);
+        // التوجيه للصفحة الرئيسية
+        window.location.href = 'index.html';
+      } catch (error) {
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          errorEl.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+        } else if (error.code === 'auth/invalid-email') {
+          errorEl.textContent = 'صيغة البريد الإلكتروني غير صحيحة.';
+        } else {
+          errorEl.textContent = 'حدث خطأ: ' + error.message;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
