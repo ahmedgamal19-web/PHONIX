@@ -15,7 +15,11 @@
         <p class="subtitle">لوحة تحكم المدير</p>
       </div>
     </div>
-
+  
+    <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+      ☰
+    </button>
+  
     <nav class="nav-links">
       <a href="index.html" class="nav-link">الرئيسية</a>
       <a href="products.html" class="nav-link">المنتجات</a>
@@ -24,6 +28,7 @@
       <a href="cart.html" class="nav-link cart-link">سلة (<span id="cart-count-header">0</span>)</a>
       <a href="#" onclick="logout()" class="nav-link" style="color: var(--danger)">تسجيل خروج</a>
     </nav>
+  </header>
   </header>
 
   <main class="container">
@@ -82,6 +87,13 @@
         await initializeData();
         initAdminPage();
         updateCartCountHeader();
+  
+        // إغلاق قائمة الهامبرغر عند اختيار رابط
+        document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.remove('show');
+          });
+        });
       });
     });
   </script>
