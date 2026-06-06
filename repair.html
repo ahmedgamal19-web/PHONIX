@@ -15,7 +15,11 @@
         <p class="subtitle">طلب صيانة سريع</p>
       </div>
     </div>
-
+  
+    <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+      ☰
+    </button>
+  
     <nav class="nav-links">
       <a href="index.html" class="nav-link">الرئيسية</a>
       <a href="products.html" class="nav-link">المنتجات</a>
@@ -57,12 +61,20 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      checkAuthState((user, role) => {
+      checkAuthState(async (user, role) => {
         const adminLink = document.getElementById('admin-link');
         if (adminLink) adminLink.style.display = (role === 'admin') ? 'inline-block' : 'none';
-
+  
+        await initializeData(); // تحميل المنتجات إن احتاجتها الصفحة (للتوحيد)
         initRepairPage();
         updateCartCountHeader();
+  
+        // إغلاق قائمة الهامبرغر عند اختيار رابط
+        document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+          link.addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.remove('show');
+          });
+        });
       });
     });
   </script>
